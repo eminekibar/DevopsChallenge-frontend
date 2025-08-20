@@ -3,7 +3,7 @@
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 string css = @"
     body {
@@ -61,7 +61,9 @@ app.MapGet("/", async (HttpContext context) =>
     }
 
     using var client = new HttpClient();
-    var url = $"http://backend:8080/api/values?YourName={yourName}";
+    var backendBase = Environment.GetEnvironmentVariable("BACKEND_URL")
+                     ?? "http://backend:8080";
+    var url = $"{backendBase}/api/values?YourName={yourName}";
     var response = await client.GetStringAsync(url);
     var message = JsonSerializer.Deserialize<List<string>>(response)?[0];
 
