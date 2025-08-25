@@ -10,22 +10,26 @@ spec:
   selector:
     matchLabels: { app: frontend }
   template:
-    metadata: { labels: { app: frontend } }
+    metadata:
+      labels: { app: frontend }
     spec:
       containers:
         - name: app
           image: eminekibar/devopschallenge-frontend:manual
-          ports: [{containerPort: 8080}]
           env:
             - name: ASPNETCORE_URLS
-              value: "http://0.0.0.0:8080"
+              value: "http://0.0.0.0:52369"
             - name: BACKEND_URL
-              value: "http://backend:8080"
+              value: "http://backend:11130"
+          ports: [{ containerPort: 52369 }]
           readinessProbe:
-            httpGet: { path: "/", port: 8080 }
+            httpGet: { path: "/", port: 52369 }
             initialDelaySeconds: 5
             periodSeconds: 10
           livenessProbe:
-            httpGet: { path: "/", port: 8080 }
+            httpGet: { path: "/", port: 52369 }
             initialDelaySeconds: 15
             periodSeconds: 20
+          resources:
+            requests: { cpu: "100m", memory: "128Mi" }
+            limits:   { cpu: "300m", memory: "256Mi" }
