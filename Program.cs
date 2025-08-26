@@ -62,7 +62,7 @@ app.MapGet("/", async (HttpContext context) =>
 
     using var client = new HttpClient();
     var backendBase = Environment.GetEnvironmentVariable("BACKEND_URL")
-                     ?? "http://backend:8080";
+                     ?? "http://backend:11130";
     var url = $"{backendBase}/api/values?YourName={yourName}";
     var response = await client.GetStringAsync(url);
     var message = JsonSerializer.Deserialize<List<string>>(response)?[0];
