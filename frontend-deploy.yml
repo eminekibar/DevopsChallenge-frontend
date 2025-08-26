@@ -6,7 +6,7 @@ metadata:
   labels:
     app: frontend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels: { app: frontend }
   template:
@@ -16,6 +16,13 @@ spec:
       containers:
         - name: app
           image: eminekibar/devopschallenge-frontend:manual
+          resources:
+            requests:
+              cpu: "100m"        # HPA hedef yüzdesi bunun üzerinden hesaplanır
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
           env:
             - name: ASPNETCORE_URLS
               value: "http://0.0.0.0:52369"
@@ -30,6 +37,13 @@ spec:
             httpGet: { path: "/", port: 52369 }
             initialDelaySeconds: 15
             periodSeconds: 20
+        - name: loader
+          image: busybox:1.36
+          command: ["sh","-c","sleep 360000"]  # İhtiyaç olduğunda CPU yükü vereceğiz
           resources:
-            requests: { cpu: "100m", memory: "128Mi" }
-            limits:   { cpu: "300m", memory: "256Mi" }
+            requests:
+              cpu: "50m"        # HPA hedef yüzdesi bunun üzerinden hesaplanır
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
