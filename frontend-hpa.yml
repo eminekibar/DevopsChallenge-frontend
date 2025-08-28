@@ -3,6 +3,8 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: frontend-hpa
   namespace: devopschallenge
+  labels:
+    app: frontend
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
