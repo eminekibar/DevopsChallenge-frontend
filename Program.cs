@@ -41,7 +41,7 @@ string css = @"
 
 app.MapGet("/", async (HttpContext context) =>
 {
-    string yourName = context.Request.Query["YourName"] ?? "";
+    sstring yourName = context.Request.Query["YourName"].ToString() ?? "";
 
     if (string.IsNullOrWhiteSpace(yourName))
     {
