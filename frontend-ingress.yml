@@ -15,6 +15,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: frontend
+            name: frontend      # <- düz deployment’ındaki Service adı
             port:
-              number: 52369
+              number: 8080

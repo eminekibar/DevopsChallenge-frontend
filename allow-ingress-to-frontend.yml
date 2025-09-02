@@ -1,4 +1,3 @@
-# allow-ingress-to-frontend.yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -6,12 +5,15 @@ metadata:
   namespace: devopschallenge
 spec:
   podSelector:
-    matchLabels: { app: frontend }
-  policyTypes: [Ingress]
+    matchLabels:
+      app: frontend
+  policyTypes:
+    - Ingress
   ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: ingress-nginx
-    ports:
-    - { protocol: TCP, port: 52369 }
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8080
