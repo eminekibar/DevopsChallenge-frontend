@@ -10,6 +10,6 @@ spec:
   selector: { app: frontend }
   ports:
     - name: http
-      port: 52369
+      port: 80
       targetPort: 52369
       nodePort: 32369
