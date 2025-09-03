@@ -6,10 +6,10 @@ metadata:
   labels:
     app: frontend
 spec:
-  type: NodePort
-  selector: { app: frontend }
+  type: ClusterIP              # Ingress için ClusterIP yeterli, NodePort şart değil
+  selector:
+    app: frontend
   ports:
-    - name: http
-      port: 80
-      targetPort: 52369
-      nodePort: 32369
+    - name: http               # İSİM ver
+      port: 80                 # Service'in dış portu (mantıksal)
+      targetPort: 52369        # Pod'un dinlediği gerçek port

@@ -4,17 +4,16 @@ metadata:
   name: frontend-ingress
   namespace: devopschallenge
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    kubernetes.io/ingress.class: nginx
 spec:
-  ingressClassName: nginx
   rules:
-  - host: app.127.0.0.1.nip.io
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: frontend      # <- düz deployment’ındaki Service adı
-            port:
-              number: 8080
+    - host: app.127.0.0.1.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  name: http    # sayı yerine İSİM kullan (hata riski sıfıra iner)
