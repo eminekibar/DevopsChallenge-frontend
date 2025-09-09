@@ -1,0 +1,14 @@
+# devopschallenge/allow-ingress-nginx.yml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-nginx
+  namespace: devopschallenge
+spec:
+  podSelector: {}          # istersen app=frontend, app=backend ile daralt
+  policyTypes: [Ingress]
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ingress-nginx
