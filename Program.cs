@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 
-var builder = WebApplication.CreateBuilder(args); //.NET 6 minimal API kullanarak basit bir web uygulaması oluşturur.
-var app = builder.Build(); // Uygulamayı oluşturur.
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
 
-app.UseHttpsRedirection(); // HTTPS yönlendirmesini etkinleştirir.
+app.UseHttpsRedirection();
 
 string css = @"
     body {
@@ -41,33 +41,32 @@ string css = @"
     }
 ";
 
-// Ana sayfa rotası
-app.MapGet("/", async (HttpContext context) => // Ana sayfa isteğini işler.
+app.MapGet("/", async (HttpContext context) =>
 {
-    string yourName = context.Request.Query["YourName"].ToString() ?? ""; // Sorgu parametresinden "YourName" değerini alır.
+    string yourName = context.Request.Query["YourName"].ToString() ?? "";
 
-    if (string.IsNullOrWhiteSpace(yourName)) // Eğer "YourName" boşsa, giriş formunu gösterir.
+    if (string.IsNullOrWhiteSpace(yourName))
     {
         return Results.Content($@"
             <html>
             <head><meta charset='UTF-8'><style>{css}</style></head>
             <body>
                 <div class='card'>
-                    <form method='get'> // GET yöntemiyle form gönderimi.
+                    <form method='get'>
                         <label>İsim:</label>
                         <input name='YourName' placeholder='Adınızı girin...'>
                         <button type='submit'>Göster</button>
                     </form>
                 </div>
             </body>
-            </html>", "text/html"); // İçeriği HTML olarak döner.
+            </html>", "text/html");
     }
 
-    using var client = new HttpClient(); // HTTP istemcisi oluşturur.
-    var backendBase = Environment.GetEnvironmentVariable("BACKEND_URL") ?? "http://backend:11130"; // backend servis URL'sini alır.
-    var url = $"{backendBase}/api/values?YourName={yourName}"; // Backend API URL'sini oluşturur.
-    var response = await client.GetStringAsync(url); // Backend API'sine istek gönderir ve yanıtı alır.
-    var message = JsonSerializer.Deserialize<List<string>>(response)?[0]; // Yanıttan mesajı ayrıştırır. JSON formatında beklenir.
+    using var client = new HttpClient();
+    var backendBase = Environment.GetEnvironmentVariable("BACKEND_URL") ?? "http://backend:11130";
+    var url = $"{backendBase}/api/values?YourName={yourName}";
+    var response = await client.GetStringAsync(url);
+    var message = JsonSerializer.Deserialize<List<string>>(response)?[0];
 
     return Results.Content($@"
         <html> 
