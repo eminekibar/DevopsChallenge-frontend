@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+var builder = WebApplication.CreateBuilder(args); //.NET 6 minimal API kullanarak basit bir web uygulaması oluşturur.
+var app = builder.Build(); // Uygulamayı oluşturur.
 
-app.UseHttpsRedirection();
+app.UseHttpsRedirection(); // HTTPS yönlendirmesini etkinleştirir.
 
 string css = @"
     body {
@@ -36,46 +36,49 @@ string css = @"
         border-radius: 4px;
         cursor: pointer;
     }
-    button:hover { background: #4a5fd2; }
+    button:hover {
+        background: #4a5fd2;
+    }
 ";
 
-app.MapGet("/", async (HttpContext context) =>
+// Ana sayfa rotası
+app.MapGet("/", async (HttpContext context) => // Ana sayfa isteğini işler.
 {
-    string yourName = context.Request.Query["YourName"].ToString() ?? "";
+    string yourName = context.Request.Query["YourName"].ToString() ?? ""; // Sorgu parametresinden "YourName" değerini alır.
 
-    if (string.IsNullOrWhiteSpace(yourName))
+    if (string.IsNullOrWhiteSpace(yourName)) // Eğer "YourName" boşsa, giriş formunu gösterir.
     {
-        return Results.Content($@"
+        return Results.Content($@" // HTML içeriğini döner.
             <html>
-            <head><meta charset='UTF-8'><style>{css}</style></head>
+            <head><meta charset='UTF-8'><style>{css}</style></head> // CSS stilini ekler.
             <body>
                 <div class='card'>
-                    <form method='get'>
+                    <form method='get'> // GET yöntemiyle form gönderimi.
                         <label>İsim:</label>
                         <input name='YourName' placeholder='Adınızı girin...'>
                         <button type='submit'>Göster</button>
                     </form>
                 </div>
             </body>
-            </html>", "text/html");
+            </html>", "text/html"); // İçeriği HTML olarak döner.
     }
 
-    using var client = new HttpClient();
-    var backendBase = Environment.GetEnvironmentVariable("BACKEND_URL")
-                     ?? "http://backend:11130";
-    var url = $"{backendBase}/api/values?YourName={yourName}";
-    var response = await client.GetStringAsync(url);
-    var message = JsonSerializer.Deserialize<List<string>>(response)?[0];
+    using var client = new HttpClient(); // HTTP istemcisi oluşturur.
+    var backendBase = Environment.GetEnvironmentVariable("BACKEND_URL") ?? "http://backend:11130"; // backend servis URL'sini alır.
+    var url = $"{backendBase}/api/values?YourName={yourName}"; // Backend API URL'sini oluşturur.
+    var response = await client.GetStringAsync(url); // Backend API'sine istek gönderir ve yanıtı alır.
+    var message = JsonSerializer.Deserialize<List<string>>(response)?[0]; // Yanıttan mesajı ayrıştırır. JSON formatında beklenir.
 
-    return Results.Content($@"
-        <html>
+    return Results.Content($@" // HTML içeriğini döner.
+        <html> 
         <head><meta charset='UTF-8'><style>{css}</style></head>
         <body>
             <div class='card'>
-                <h2>{message}</h2>
+                <h2>{message}</h2> // Mesajı gösterir.
+                <a href='/'><button>Geri Dön</button></a> // Geri dön butonu.
             </div>
         </body>
-        </html>", "text/html");
+        </html>", "text/html"); // İçeriği HTML olarak döner.
 });
 
-app.Run();
+app.Run(); // Uygulamayı çalıştırır.
