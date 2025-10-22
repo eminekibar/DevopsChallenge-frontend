@@ -75,7 +75,9 @@ app.MapGet("/", async (HttpContext context) => // Ana sayfa isteğini işler.
         <body>
             <div class='card'>
                 <h2>{message}</h2> // Mesajı gösterir.
-                <a href='/'><button>Geri Dön</button></a> // Geri dön butonu.
+                // forma geri dönme butonu
+                <form method='get'>
+                    <button type='submit'>Geri Dön</button>
             </div>
         </body>
         </html>", "text/html"); // İçeriği HTML olarak döner.
