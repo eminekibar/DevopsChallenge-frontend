@@ -48,9 +48,9 @@ app.MapGet("/", async (HttpContext context) => // Ana sayfa isteğini işler.
 
     if (string.IsNullOrWhiteSpace(yourName)) // Eğer "YourName" boşsa, giriş formunu gösterir.
     {
-        return Results.Content($@" // HTML içeriğini döner.
+        return Results.Content($@"
             <html>
-            <head><meta charset='UTF-8'><style>{css}</style></head> // CSS stilini ekler.
+            <head><meta charset='UTF-8'><style>{css}</style></head>
             <body>
                 <div class='card'>
                     <form method='get'> // GET yöntemiyle form gönderimi.
@@ -69,15 +69,15 @@ app.MapGet("/", async (HttpContext context) => // Ana sayfa isteğini işler.
     var response = await client.GetStringAsync(url); // Backend API'sine istek gönderir ve yanıtı alır.
     var message = JsonSerializer.Deserialize<List<string>>(response)?[0]; // Yanıttan mesajı ayrıştırır. JSON formatında beklenir.
 
-    return Results.Content($@" // HTML içeriğini döner.
+    return Results.Content($@"
         <html> 
         <head><meta charset='UTF-8'><style>{css}</style></head>
         <body>
             <div class='card'>
-                <h2>{message}</h2> // Mesajı gösterir.
+                <h2>{message}</h2>
             </div>
         </body>
-        </html>", "text/html"); // İçeriği HTML olarak döner.
+        </html>", "text/html");
 });
 
-app.Run(); // Uygulamayı çalıştırır.
+app.Run();
